@@ -117,9 +117,75 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
-// alert("Hello World")
-},{}],"../../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})({"redditapi.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  search: function search(searchTerm, searchLimit, sortBy) {
+    // console.log("searching...")
+    fetch("https://www.reddit.com/search.json?q=".concat(searchTerm)).then(function (res) {
+      return res.json;
+    }).then(function (data) {
+      return console.log(data);
+    });
+  }
+};
+exports.default = _default;
+},{}],"index.js":[function(require,module,exports) {
+"use strict";
+
+var _redditapi = _interopRequireDefault(require("./redditapi"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var searchForm = document.getElementById("search-form");
+var searchInput = document.getElementById("search-input");
+
+// Form Event Listener
+searchForm.addEventListener('submit', function (e) {
+  // Get search term
+  var searchTerm = searchInput.value;
+  // Get Sort
+  var sortBy = document.querySelector('input[name="sortby"]:checked').value;
+  // Get limit 
+  var searchLimit = document.getElementById("limit").value;
+  // console.log(searchLimit)
+
+  if (searchTerm === "") {
+    // show message
+    showMessage('Please add a search Term', 'alert-danger');
+  }
+
+  // clear output
+  searchInput.value = "";
+
+  // search reddit
+  _redditapi.default.search(searchTerm, searchLimit, sortBy);
+  e.preventDefault();
+});
+
+// show message
+function showMessage(message, className) {
+  // create div
+  var div = document.createElement('div');
+  // Add Classes
+  div.className = "alert ".concat(className);
+  // Add text
+  div.appendChild(document.createTextNode(message));
+  // Get parent 
+  var searchContainer = document.getElementById('search-container');
+  // Get child
+  var search = document.getElementById('search');
+  // show message
+  searchContainer.insertBefore(div, search);
+  // message timeout
+  setTimeout(function () {
+    document.querySelector('.alert').remove();
+  }, 3000);
+}
+},{"./redditapi":"redditapi.js"}],"../../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -144,7 +210,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64567" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56789" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

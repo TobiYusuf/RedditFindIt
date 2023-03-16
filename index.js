@@ -1,3 +1,5 @@
+import reddit from './redditapi'
+
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 
@@ -9,12 +11,19 @@ searchForm.addEventListener('submit', e => {
     const sortBy = document.querySelector('input[name="sortby"]:checked').value;
     // Get limit 
     const searchLimit = document.getElementById("limit").value;
-    console.log(searchLimit)
+    // console.log(searchLimit)
 
     if (searchTerm === "") {
         // show message
-        showMessage('Please add a search Term', 'alert-danger')
+        showMessage('Please add a search Term', 'alert-danger');
     }
+
+    // clear output
+    searchInput.value = "";
+
+    // search reddit
+    reddit.search(searchTerm, searchLimit, sortBy);
+
     e.preventDefault();
 });
 
@@ -32,5 +41,9 @@ function showMessage(message, className) {
     const search = document.getElementById('search');
     // show message
     searchContainer.insertBefore(div, search);
+    // message timeout
+    setTimeout(() => {
+        document.querySelector('.alert').remove()
+    }, 3000);
 
 }
